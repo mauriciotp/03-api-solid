@@ -31,8 +31,6 @@ describe('Check-in Use Case', () => {
   })
 
   it('should be able to check in', async () => {
-    vi.setSystemTime(new Date(2025, 0, 20, 8, 0, 0))
-
     const { checkIn } = await sut.execute({
       userId: 'user-01',
       gymId: 'gym-01',
@@ -83,5 +81,25 @@ describe('Check-in Use Case', () => {
     })
 
     expect(checkIn.id).toEqual(expect.any(String))
+  })
+
+  it('should not be able to check in on distant gym', async () => {
+    gymsRepository.items.push({
+      id: 'gym-02',
+      title: 'JavaScript Gym',
+      description: '',
+      phone: '',
+      latitude: new Decimal(-1.3836561),
+      longitude: new Decimal(-48.4128458),
+    })
+
+    await expect(
+      sut.execute({
+        userId: 'user-01',
+        gymId: 'gym-02',
+        userLatitude: -1.3875265,
+        userLongitude: -48.4143627,
+      })
+    ).rejects.toBeInstanceOf(Error)
   })
 })
