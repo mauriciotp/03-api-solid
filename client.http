@@ -28,3 +28,8 @@ Content-Type: application/json
 GET {{baseUrl}}/me
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
+
+###
+
+# @name refresh_token
+PATCH {{baseUrl}}/token/refresh
